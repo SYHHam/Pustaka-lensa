@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Book, NavigationTab, CommentItem } from './types';
+import { Book, NavigationTab, CommentItem, AuthUser } from './types';
 import { INITIAL_BOOKS } from './data/dummyBooks';
 import { Sidebar } from './components/Sidebar';
 import { Topbar } from './components/Topbar';
@@ -17,14 +17,115 @@ import { HelpCenterModal } from './components/HelpCenterModal';
 import { BottomSheet } from './components/BottomSheet';
 import { BookDetailPage } from './components/BookDetailPage';
 import { ReaderMode } from './components/ReaderMode';
+import { AuthModal } from './components/AuthModal';
 
 export default function App() {
-  // Books Master State
-  const [books, setBooks] = useState<Book[]>(INITIAL_BOOKS);
-  const [userName, setUserName] = useState<string>('Budi');
-  const [userAvatar, setUserAvatar] = useState<string>(
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
-  );
+  // Books Master State with localStorage persistence
+  const [books, setBooks] = useState<Book[]>(() => {
+    try {
+      const saved = localStorage.getItem('pustaka_lensa_books');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error('Failed to load books from localStorage', e);
+    }
+    return INITIAL_BOOKS;
+  });
+
+  // Authenticated User State
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => {
+    try {
+      const saved = localStorage.getItem('pustaka_lensa_auth_user');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error('Failed to load auth user from localStorage', e);
+    }
+    return {
+      id: 'usr-default-1',
+      name: 'Budi Santoso',
+      email: 'budi.santoso@gmail.com',
+      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+      isVerified: true,
+      provider: 'google',
+      joinedAt: '1 September 2026'
+    };
+  });
+
+  const [userName, setUserName] = useState<string>(() => {
+    return currentUser?.name || localStorage.getItem('pustaka_lensa_username') || 'Budi';
+  });
+
+  const [userAvatar, setUserAvatar] = useState<string>(() => {
+    return (
+      currentUser?.avatarUrl ||
+      localStorage.getItem('pustaka_lensa_avatar') ||
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
+    );
+  });
+
+  // Auth Gate Modal State
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
+  const [authModalInitialTab, setAuthModalInitialTab] = useState<'login' | 'register'>('login');
+
+  // Handle Login / Register Success
+  const handleLoginSuccess = (user: AuthUser) => {
+    setCurrentUser(user);
+    setUserName(user.name);
+    setUserAvatar(user.avatarUrl);
+    try {
+      localStorage.setItem('pustaka_lensa_auth_user', JSON.stringify(user));
+      localStorage.setItem('pustaka_lensa_username', user.name);
+      localStorage.setItem('pustaka_lensa_avatar', user.avatarUrl);
+    } catch (e) {
+      console.error('Failed to persist user session', e);
+    }
+  };
+
+  // Handle Logout
+  const handleLogout = () => {
+    setCurrentUser(null);
+    setUserName('Tamu');
+    setUserAvatar('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80');
+    try {
+      localStorage.removeItem('pustaka_lensa_auth_user');
+      localStorage.setItem('pustaka_lensa_username', 'Tamu');
+    } catch (e) {
+      console.error('Failed to clear user session', e);
+    }
+  };
+
+  const handleOpenAuthModal = (tab: 'login' | 'register' = 'login') => {
+    setAuthModalInitialTab(tab);
+    setIsAuthModalOpen(true);
+  };
+
+  // Sync state changes with localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('pustaka_lensa_books', JSON.stringify(books));
+    } catch (e) {
+      console.error('Failed to save books to localStorage', e);
+    }
+  }, [books]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('pustaka_lensa_username', userName);
+    } catch (e) {
+      console.error('Failed to save username to localStorage', e);
+    }
+  }, [userName]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('pustaka_lensa_avatar', userAvatar);
+    } catch (e) {
+      console.error('Failed to save avatar to localStorage', e);
+    }
+  }, [userAvatar]);
 
   // Navigation State
   const [activeTab, setActiveTab] = useState<NavigationTab>('beranda');
@@ -41,6 +142,7 @@ export default function App() {
   // Footer Modals State
   const [isFAQOpen, setIsFAQOpen] = useState<boolean>(false);
   const [isHelpCenterOpen, setIsHelpCenterOpen] = useState<boolean>(false);
+  const [settingsInitialSubView, setSettingsInitialSubView] = useState<'main' | 'setting-akun' | 'about-us' | 'feedback'>('main');
 
   // Derived Book Selections
   const selectedBookForSheet = books.find(b => b.id === selectedBookSheetId) || null;
@@ -224,6 +326,10 @@ export default function App() {
             onSelectBook={handleOpenBookSheet}
             userName={userName}
             userAvatar={userAvatar}
+            userEmail={currentUser?.email}
+            isLoggedIn={!!currentUser}
+            onOpenAuthModal={handleOpenAuthModal}
+            onLogout={handleLogout}
             onNavigateToSettings={() => {
               setActiveTab('pengaturan');
               window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -248,6 +354,8 @@ export default function App() {
                 onToggleSave={handleToggleSave}
                 onAddComment={handleAddComment}
                 onUpdateRating={handleUpdateRating}
+                userName={userName}
+                userAvatar={userAvatar}
               />
             </motion.div>
           ) : (
@@ -265,6 +373,7 @@ export default function App() {
                     books={books}
                     onSelectBook={handleOpenBookSheet}
                     onSelectCategory={handleSelectCategory}
+                    selectedCategory={selectedCategory}
                     onNavigateToShelves={() => setActiveTab('rak-bukuku')}
                     onNavigateToExplore={() => setActiveTab('jelajahi')}
                     userName={userName}
@@ -274,6 +383,11 @@ export default function App() {
                   <Footer
                     onOpenFAQ={() => setIsFAQOpen(true)}
                     onOpenHelpCenter={() => setIsHelpCenterOpen(true)}
+                    onOpenAboutUs={() => {
+                      setSettingsInitialSubView('about-us');
+                      setActiveTab('pengaturan');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     onNavigateToExplore={() => {
                       setActiveTab('jelajahi');
                       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -316,10 +430,30 @@ export default function App() {
 
               {activeTab === 'pengaturan' && (
                 <SettingsView
+                  key={`settings-${settingsInitialSubView}`}
                   userName={userName}
-                  onUpdateUserName={setUserName}
+                  onUpdateUserName={(name) => {
+                    setUserName(name);
+                    if (currentUser) {
+                      const updated = { ...currentUser, name };
+                      setCurrentUser(updated);
+                      localStorage.setItem('pustaka_lensa_auth_user', JSON.stringify(updated));
+                    }
+                  }}
                   userAvatar={userAvatar}
-                  onUpdateAvatar={setUserAvatar}
+                  onUpdateAvatar={(avatar) => {
+                    setUserAvatar(avatar);
+                    if (currentUser) {
+                      const updated = { ...currentUser, avatarUrl: avatar };
+                      setCurrentUser(updated);
+                      localStorage.setItem('pustaka_lensa_auth_user', JSON.stringify(updated));
+                    }
+                  }}
+                  initialSubView={settingsInitialSubView}
+                  currentUser={currentUser}
+                  isLoggedIn={!!currentUser}
+                  onOpenAuthModal={handleOpenAuthModal}
+                  onLogout={handleLogout}
                 />
               )}
             </motion.main>
@@ -338,6 +472,14 @@ export default function App() {
           />
         )}
       </div>
+
+      {/* Auth Gate (Login / Register / Anti-Sybil OTP Verification Modal) */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        initialTab={authModalInitialTab}
+        onSuccess={handleLoginSuccess}
+      />
 
       {/* FAQ Modal */}
       <FAQModal

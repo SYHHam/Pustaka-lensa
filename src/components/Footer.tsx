@@ -8,18 +8,21 @@ import {
   CheckCircle2, 
   BookOpen, 
   Heart,
-  ArrowRight
+  ArrowRight,
+  AlertCircle
 } from 'lucide-react';
 
 interface FooterProps {
   onOpenFAQ?: () => void;
   onOpenHelpCenter?: () => void;
+  onOpenAboutUs?: () => void;
   onNavigateToExplore?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   onOpenFAQ,
   onOpenHelpCenter,
+  onOpenAboutUs,
 }) => {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -140,6 +143,15 @@ export const Footer: React.FC<FooterProps> = ({
               <Send className="w-3 h-3 text-blue-500" />
               <span>Telegram</span>
             </a>
+
+            {/* About Us Button */}
+            <button
+              onClick={onOpenAboutUs}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-neutral-200 hover:border-neutral-400 text-xs font-medium text-neutral-700 transition-colors cursor-pointer shadow-2xs"
+            >
+              <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
+              <span>About Us</span>
+            </button>
 
             {/* FAQ Button */}
             <button

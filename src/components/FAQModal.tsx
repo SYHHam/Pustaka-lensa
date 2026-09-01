@@ -24,40 +24,133 @@ interface FAQItem {
   category: string;
 }
 
-const DEFAULT_FAQS: FAQItem[] = [
+export const OFFICIAL_FAQS: FAQItem[] = [
+  // Tentang Platform
   {
-    id: '1',
-    category: 'Akses & Biaya',
-    question: 'Apakah seluruh buku di Pustaka Lensa benar-benar gratis?',
-    answer: 'Ya, 100% gratis tanpa biaya tersembunyi. Seluruh karya klasik, ringkasan pemikiran, dan buku kurasi di sini ditujukan sebagai arsip literasi terbuka yang dapat diakses oleh siapa saja.',
+    id: 'tp-1',
+    category: 'Tentang Platform',
+    question: 'Apa itu Pustaka Lensa?',
+    answer: 'Pustaka Lensa adalah platform buku digital edukatif yang terbuka untuk semua kalangan, menyediakan koleksi e-book berkualitas untuk siapa saja yang ingin terus belajar — kapan saja dan di mana saja.',
   },
   {
-    id: '2',
-    category: 'Membaca',
-    question: 'Bagaimana cara menyimpan progres halaman terakhir saya?',
-    answer: 'Aplikasi ini secara otomatis mencatat bab dan persentase bacaanmu saat kamu membuka buku. Kamu juga dapat menekan tombol Bookmark manual di dalam lembar bacaan untuk penanda khusus.',
+    id: 'tp-2',
+    category: 'Tentang Platform',
+    question: 'Apakah Pustaka Lensa gratis?',
+    answer: 'Sebagian besar koleksi di Pustaka Lensa dapat diakses secara gratis untuk mendukung akses literasi terbuka masyarakat luas.',
   },
   {
-    id: '3',
-    category: 'Fitur Reader',
-    question: 'Bisakah saya mengubah ukuran huruf atau tema gelap?',
-    answer: 'Tentu! Di pojok kanan atas lembar bacaan terdapat ikon pengaturan (huruf Aa) untuk mengatur continuous font size, jenis tipografi (Literata, Lora, Garamond, dsb.), dan mode gelap.',
+    id: 'tp-3',
+    category: 'Tentang Platform',
+    question: 'Apakah saya bisa upload buku saya sendiri ke Pustaka Lensa?',
+    answer: 'Tidak. Pustaka Lensa adalah platform tertutup — seluruh koleksi buku diunggah dan dikurasi langsung oleh tim internal Pustaka Lensa untuk memastikan kualitas dan kredibilitas kontennya. Pengguna dapat membaca, menyimpan, memberi rating, dan meninggalkan komentar.',
   },
   {
-    id: '4',
-    category: 'Kustomisasi Konten',
-    question: 'Kapan dokumen FAQ resmi saya akan dimasukkan?',
-    answer: 'Begitu dokumen resmi kamu kirimkan, kami akan langsung memperbarui seluruh butir pertanyaan dan jawaban di panel ini secara presisi dan terstruktur!',
+    id: 'tp-4',
+    category: 'Tentang Platform',
+    question: 'Buku-buku di Pustaka Lensa membahas topik apa saja?',
+    answer: 'Beragam kategori edukatif terkurasi, di antaranya: Pengembangan Diri, Bisnis & Kewirausahaan, Sains & Teknologi, Sejarah & Budaya, Keterampilan Kerja, Kesehatan & Gaya Hidup, serta Bahasa & Sastra.',
+  },
+  {
+    id: 'tp-5',
+    category: 'Tentang Platform',
+    question: 'Siapa yang bisa menggunakan Pustaka Lensa?',
+    answer: 'Semua orang, dari segala usia dan latar belakang — pelajar, mahasiswa, profesional, maupun masyarakat umum yang ingin membaca dan belajar lebih banyak.',
+  },
+  {
+    id: 'tp-6',
+    category: 'Tentang Platform',
+    question: 'Apakah Pustaka Lensa menggunakan AI?',
+    answer: 'Ya, secara terbuka kami sampaikan bahwa platform ini dibangun secara kolaboratif dengan bantuan AI, baik dalam proses desain maupun sebagian penyusunan konten. Namun, setiap konten yang melibatkan AI tetap melalui proses verifikasi ketat terhadap sumber-sumber terpercaya dan disesuaikan dengan kaidah edukatif sebelum ditinjau dan dipublikasikan oleh tim — bukan asal generate lalu langsung diterbitkan.',
+  },
+
+  // Akun & Penggunaan
+  {
+    id: 'ak-1',
+    category: 'Akun & Penggunaan',
+    question: 'Bagaimana cara mulai membaca di Pustaka Lensa?',
+    answer: 'Daftar atau masuk ke akun Anda, jelajahi koleksi buku melalui katalog Beranda atau Jelajahi, lalu pilih buku yang ingin dibaca dan klik tombol "Mulai Membaca".',
+  },
+  {
+    id: 'ak-2',
+    category: 'Akun & Penggunaan',
+    question: 'Apakah saya perlu login untuk membaca buku?',
+    answer: 'Ya, login diperlukan agar progres bacaan, buku yang disimpan di rak, target membaca harian, dan riwayat baca Anda tersimpan secara presisi di profil masing-masing.',
+  },
+  {
+    id: 'ak-3',
+    category: 'Akun & Penggunaan',
+    question: 'Bagaimana cara melanjutkan buku yang belum selesai dibaca?',
+    answer: 'Progres baca Anda tersimpan otomatis. Cukup buka halaman Beranda atau Dashboard, lalu pilih buku pada bagian "Lanjutkan Membaca" — Anda akan langsung diarahkan ke bab dan lembaran terakhir yang sedang dibaca.',
+  },
+  {
+    id: 'ak-4',
+    category: 'Akun & Penggunaan',
+    question: 'Apa itu "Target Membaca Harian"?',
+    answer: 'Fitur yang membantu Anda membangun kebiasaan membaca secara konsisten — Anda dapat memantau dan menyelesaikan target durasi dan bab membaca per hari sesuai kemampuan dan kesibukan.',
+  },
+  {
+    id: 'ak-5',
+    category: 'Akun & Penggunaan',
+    question: 'Apakah saya bisa membaca buku secara offline?',
+    answer: 'Pustaka Lensa dirancang sebagai web reader modern dengan sinkronisasi penyimpanan lokal otomatis di peramban (browser) perangkat Anda.',
+  },
+
+  // Fitur Membaca
+  {
+    id: 'fm-1',
+    category: 'Fitur Membaca',
+    question: 'Apakah saya bisa mengubah ukuran atau jenis huruf saat membaca?',
+    answer: 'Bisa! Di dalam Reader Mode, tersedia pengaturan ukuran huruf (slider kontinu), pemilihan font tipografi (Source Serif, Literata, Lora, Garamond, Merriweather, Plus Jakarta Sans), jarak spasi baris, serta tema Terang & Gelap (Dark Mode).',
+  },
+  {
+    id: 'fm-2',
+    category: 'Fitur Membaca',
+    question: 'Bagaimana cara berpindah bab saat membaca?',
+    answer: 'Buka panel Daftar Isi (ikon list/buku) di dalam Reader Mode untuk melompat langsung ke bab mana pun yang Anda inginkan dengan satu klik.',
+  },
+  {
+    id: 'fm-3',
+    category: 'Fitur Membaca',
+    question: 'Apakah saya bisa menandai halaman tertentu secara manual?',
+    answer: 'Bisa, gunakan fitur tombol Bookmark pita yang tersedia di panel pembaca untuk menyematkan penanda manual pada bab atau halaman favorit Anda.',
+  },
+
+  // Rating & Komentar
+  {
+    id: 'rk-1',
+    category: 'Rating & Komentar',
+    question: 'Apakah saya bisa memberi rating dan komentar pada buku?',
+    answer: 'Bisa. Pada lembar detail buku, Anda dapat memberikan penilaian bintang (1-5) dan menuliskan ulasan atau pandangan Anda untuk membantu pembaca lainnya.',
+  },
+  {
+    id: 'rk-2',
+    category: 'Rating & Komentar',
+    question: 'Apakah komentar saya bisa diedit atau dihapus?',
+    answer: 'Ulasan Anda ditampilkan secara transparan bersama nama dan foto profil Anda dalam komunitas pembaca Pustaka Lensa.',
+  },
+
+  // Bantuan Lainnya
+  {
+    id: 'bl-1',
+    category: 'Bantuan Lainnya',
+    question: 'Saya menemukan kendala teknis, ke mana saya bisa melapor?',
+    answer: 'Anda dapat mengirimkan pesan langsung melalui menu Pusat Bantuan (Help Center) atau form Feedback & Masukan di menu Pengaturan.',
+  },
+  {
+    id: 'bl-2',
+    category: 'Bantuan Lainnya',
+    question: 'Bagaimana cara mengelola atau mengubah profil akun?',
+    answer: 'Buka menu Pengaturan -> Setting Akun untuk mengubah nama pengguna (1x per bulan), memperbarui foto profil/avatar, mengganti kata sandi, atau keluar akun.',
   },
 ];
 
 export const FAQModal: React.FC<FAQModalProps> = ({ isOpen, onClose }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [openIndex, setOpenIndex] = useState<string | null>('1');
+  const [openIndex, setOpenIndex] = useState<string | null>('tp-1');
 
   if (!isOpen) return null;
 
-  const filteredFaqs = DEFAULT_FAQS.filter(
+  const filteredFaqs = OFFICIAL_FAQS.filter(
     (faq) =>
       faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
       faq.answer.toLowerCase().includes(searchQuery.toLowerCase()) ||

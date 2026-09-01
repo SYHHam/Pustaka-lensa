@@ -80,3 +80,13 @@ export type NavigationTab =
   | 'kategori'
   | 'riwayat'
   | 'pengaturan';
+
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl: string;
+  isVerified: boolean;
+  provider: 'google' | 'email';
+  joinedAt: string;
+}

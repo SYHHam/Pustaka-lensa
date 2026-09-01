@@ -9,7 +9,11 @@ interface TopbarProps {
   onSelectBook: (book: Book) => void;
   userName?: string;
   userAvatar?: string;
+  userEmail?: string;
+  isLoggedIn?: boolean;
   onNavigateToSettings?: () => void;
+  onOpenAuthModal?: (tab?: 'login' | 'register') => void;
+  onLogout?: () => void;
 }
 
 export const Topbar: React.FC<TopbarProps> = ({
@@ -19,7 +23,11 @@ export const Topbar: React.FC<TopbarProps> = ({
   onSelectBook,
   userName = "Budi",
   userAvatar = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+  userEmail = "pembaca@pustakalensa.id",
+  isLoggedIn = true,
   onNavigateToSettings,
+  onOpenAuthModal,
+  onLogout,
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasNewNotification, setHasNewNotification] = useState(true);
@@ -174,46 +182,87 @@ export const Topbar: React.FC<TopbarProps> = ({
           )}
         </div>
 
-        {/* User Profile Avatar Pill */}
-        <div ref={userMenuRef} className="relative">
-          <button
-            id="topbar-user-menu-btn"
-            onClick={() => setShowUserMenu(!showUserMenu)}
-            className="flex items-center gap-2.5 p-1 sm:px-3 sm:py-1.5 bg-white border border-gray-200/80 rounded-full shadow-xs hover:bg-gray-50 transition-all cursor-pointer"
-          >
-            <img 
-              src={userAvatar} 
-              alt="Avatar"
-              className="w-7 h-7 rounded-full object-cover"
-              referrerPolicy="no-referrer"
-            />
-            <span className="hidden sm:inline font-sans text-xs font-semibold text-gray-800">
-              {userName}
-            </span>
-          </button>
-
-          {showUserMenu && (
-            <div 
-              id="topbar-user-dropdown"
-              className="absolute right-0 top-12 w-48 bg-white rounded-2xl shadow-xl p-2 border border-gray-200 z-50 animate-in fade-in zoom-in-95 duration-150 space-y-1"
+        {/* User Profile Avatar Pill OR Login Button */}
+        {isLoggedIn ? (
+          <div ref={userMenuRef} className="relative">
+            <button
+              id="topbar-user-menu-btn"
+              onClick={() => setShowUserMenu(!showUserMenu)}
+              className="flex items-center gap-2.5 p-1 sm:px-3 sm:py-1.5 bg-white border border-gray-200/80 rounded-full shadow-xs hover:bg-gray-50 transition-all cursor-pointer"
             >
-              <div className="px-3 py-2 border-b border-gray-100">
-                <p className="text-xs font-bold text-gray-900">{userName}</p>
-                <p className="text-[10px] text-gray-400">Pembaca Terdaftar</p>
-              </div>
-              <button 
-                onClick={() => {
-                  setShowUserMenu(false);
-                  if (onNavigateToSettings) onNavigateToSettings();
-                }}
-                className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 rounded-xl transition-colors font-sans flex items-center gap-2 cursor-pointer"
+              <img 
+                src={userAvatar} 
+                alt="Avatar"
+                className="w-7 h-7 rounded-full object-cover"
+                referrerPolicy="no-referrer"
+              />
+              <span className="hidden sm:inline font-sans text-xs font-semibold text-gray-800">
+                {userName}
+              </span>
+            </button>
+
+            {showUserMenu && (
+              <div 
+                id="topbar-user-dropdown"
+                className="absolute right-0 top-12 w-56 bg-white rounded-2xl shadow-xl p-2 border border-gray-200 z-50 animate-in fade-in zoom-in-95 duration-150 space-y-1"
               >
-                <UserIcon className="w-3.5 h-3.5 text-gray-400" />
-                <span>Pengaturan Akun</span>
-              </button>
-            </div>
-          )}
-        </div>
+                <div className="px-3 py-2 border-b border-gray-100">
+                  <p className="text-xs font-bold text-gray-900 truncate">{userName}</p>
+                  <p className="text-[10px] text-gray-500 font-sans truncate">{userEmail}</p>
+                  <span className="inline-block mt-1 px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[9px] font-bold">
+                    ✓ Terverifikasi Anti-Sybil
+                  </span>
+                </div>
+
+                <button 
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    if (onNavigateToSettings) onNavigateToSettings();
+                  }}
+                  className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 rounded-xl transition-colors font-sans flex items-center gap-2 cursor-pointer"
+                >
+                  <UserIcon className="w-3.5 h-3.5 text-gray-400" />
+                  <span>Pengaturan Akun</span>
+                </button>
+
+                <button 
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    if (onOpenAuthModal) onOpenAuthModal('login');
+                  }}
+                  className="w-full text-left px-3 py-2 text-xs text-amber-700 hover:bg-amber-50 rounded-xl transition-colors font-sans flex items-center gap-2 cursor-pointer"
+                >
+                  <UserIcon className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Ganti / Masuk Akun Lain</span>
+                </button>
+
+                <div className="border-t border-gray-100 pt-1">
+                  <button 
+                    onClick={() => {
+                      setShowUserMenu(false);
+                      if (onLogout) onLogout();
+                    }}
+                    className="w-full text-left px-3 py-2 text-xs text-red-600 hover:bg-red-50 rounded-xl transition-colors font-sans flex items-center gap-2 cursor-pointer"
+                  >
+                    <LogOut className="w-3.5 h-3.5 text-red-500" />
+                    <span>Keluar (Logout)</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <button
+              id="topbar-login-gate-btn"
+              onClick={() => onOpenAuthModal && onOpenAuthModal('login')}
+              className="px-3.5 py-1.5 rounded-full bg-neutral-900 hover:bg-black text-white font-sans text-xs font-bold transition-all cursor-pointer shadow-2xs hover:shadow-xs active:scale-95 flex items-center gap-1.5"
+            >
+              <UserIcon className="w-3.5 h-3.5" />
+              <span>Masuk / Daftar</span>
+            </button>
+          </div>
+        )}
       </div>
     </header>
   );

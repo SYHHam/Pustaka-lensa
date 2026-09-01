@@ -22,6 +22,8 @@ interface BookDetailPageProps {
   onToggleSave: (bookId: string) => void;
   onAddComment: (bookId: string, comment: CommentItem) => void;
   onUpdateRating: (bookId: string, rating: number) => void;
+  userName?: string;
+  userAvatar?: string;
 }
 
 export const BookDetailPage: React.FC<BookDetailPageProps> = ({
@@ -31,6 +33,8 @@ export const BookDetailPage: React.FC<BookDetailPageProps> = ({
   onToggleSave,
   onAddComment,
   onUpdateRating,
+  userName = 'Budi',
+  userAvatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
 }) => {
   const [newCommentText, setNewCommentText] = useState('');
   const [userRating, setUserRating] = useState<number>(5);
@@ -45,10 +49,10 @@ export const BookDetailPage: React.FC<BookDetailPageProps> = ({
 
     const newComment: CommentItem = {
       id: `c-${Date.now()}`,
-      authorName: 'Budi (Anda)',
-      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
-      content: newCommentText.trim(),
+      authorName: `${userName} (Anda)`,
+      avatarUrl: userAvatar,
       rating: userRating,
+      content: newCommentText.trim(),
       timeAgo: 'Baru saja',
     };
 
