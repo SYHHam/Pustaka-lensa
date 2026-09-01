@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: 'Playfair Display', 'Times New Roman', Times, Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-reader-source: 'Source Serif 4', Georgia, serif;
+  --font-reader-literata: 'Literata', 'Merriweather', Georgia, serif;
+  --font-reader-lora: 'Lora', Georgia, serif;
+  --font-reader-garamond: 'EB Garamond', Garamond, Georgia, serif;
+  --font-reader-merriweather: 'Merriweather', Georgia, serif;
+  --font-reader-jakarta: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-sans-ui {
+  font-family: var(--font-sans);
+}
+
+.font-reader-source {
+  font-family: var(--font-reader-source);
+}
+
+.font-reader-literata {
+  font-family: var(--font-reader-literata);
+}
+
+.font-reader-lora {
+  font-family: var(--font-reader-lora);
+}
+
+.font-reader-garamond {
+  font-family: var(--font-reader-garamond);
+}
+
+.font-reader-merriweather {
+  font-family: var(--font-reader-merriweather);
+}
+
+.font-reader-jakarta {
+  font-family: var(--font-reader-jakarta);
+}
+
+/* 3D Page Turning Mechanics */
+.perspective-book {
+  perspective: 2000px;
+  perspective-origin: center center;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@keyframes wattpadFlipNext {
+  0% {
+    transform: rotateY(0deg);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+  50% {
+    box-shadow: -15px 15px 35px rgba(0,0,0,0.25);
+  }
+  100% {
+    transform: rotateY(-180deg);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  }
+}
+
+@keyframes wattpadFlipPrev {
+  0% {
+    transform: rotateY(-180deg);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  }
+  50% {
+    box-shadow: 15px 15px 35px rgba(0,0,0,0.25);
+  }
+  100% {
+    transform: rotateY(0deg);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+}
+
+.animate-wattpad-next {
+  animation: wattpadFlipNext 380ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.animate-wattpad-prev {
+  animation: wattpadFlipPrev 380ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Custom scrollbar hiding for carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Modern App Container & Shadow Aesthetics */
+.modern-card {
+  background-color: #FFFFFF;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(229, 231, 235, 0.7);
+  box-shadow: 0 2px 12px -2px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modern-card:hover {
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.modern-pill-btn {
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.modern-pill-btn:active {
+  transform: scale(0.97);
+}
+
+/* Clean Book Spine & Cover Styling */
+.modern-book-cover {
+  border-radius: 1rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.modern-book-cover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px -6px rgba(0, 0, 0, 0.22), 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Bottom Sheet Drag Sheet Utilities */
+.bottom-sheet-drag-handle {
+  touch-action: none;
+  cursor: grab;
+}
+
+.bottom-sheet-drag-handle:active {
+  cursor: grabbing;
+}

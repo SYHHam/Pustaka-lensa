@@ -1,0 +1,6 @@
+{
+  "name": "Pustaka Lensa",
+  "description": "Platform perpustakaan digital kurasi tertutup dengan dashboard elegan, detail buku interaktif, dan reader mode bergaya page-turn.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
